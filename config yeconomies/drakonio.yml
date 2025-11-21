@@ -1,0 +1,232 @@
+# Identificação necessária para a API de Economias do yPlugins
+# Identificação necessária para a API de Tops do yTops
+# Identificação necessária para a API do PAPI
+# Identificação necessária para a API de Chat
+yplugins-id: yeconomias-drakonio
+top-user: fleaw_
+# yPlugins -> puxar a formatação do yPlugins
+# LETTER -> formatar em letras: 1K, 1M...
+# NUMBER -> formatar em números decimais: 1.000, 10.000.000...
+format: yPlugins
+
+# Ativar o sistema de receber a mensagem de pagamento na proxy (Velocity e BungeeCord)
+proxy-chat: true
+
+command:
+  command: drakonio
+  aliases:
+  - drakonios
+
+sub-command:
+  add:
+  - add
+  - adicionar
+  - somar
+  - sum
+  - depositar
+  - deposit
+  remove:
+  - remove
+  - remover
+  - subtrair
+  - subtract
+  - withdraw
+  - sacar
+  - retirar
+  set:
+  - set
+  - setar
+  - define
+  - definir
+  pay:
+  - pay
+  - pagar
+  - enviar
+  - send
+  top:
+  - top
+  help:
+  - help
+  - ajuda
+  force-update:
+  - forceupdate
+  check:
+  - check
+  - cheque
+
+usage:
+  add: '&cUse: /{command} {arg} <player> <quantia>'
+  remove: '&cUse: /{command} {arg} <player> <quantia>'
+  set: '&cUse: /{command} {arg} <player> <quantia>'
+  pay: '&cUse: /{command} {arg} <player> <quantia>'
+  check: '&cUse: /{command} {arg} <player> <porcentagem> <multiplier>'
+
+permission:
+  main: yeconomias.drakonio.use
+  look: yeconomias.drakonio.look
+  add: yeconomias.drakonio.add
+  remove: yeconomias.drakonio.remove
+  set: yeconomias.drakonio.set
+  pay: yeconomias.drakonio.pay
+  top: yeconomias.drakonio.top
+  help: yeconomias.drakonio.help
+  force-update: yeconomias.drakonio.forceupdate
+  admin: yeconomias.drakonio.admin
+  check: yeconomias.drakonio.check
+
+general:
+  # Quantia que recebe ao entrar no reino
+  default: 0
+  # Abrir menu ao digitar /drakonio
+  main-menu: true
+  # Abrir menu ao digitar /drakonio top
+  top-menu: true
+  # Proibir o "pay/enviar" caso o lorde dragão esteja offline
+  block-offline-pay: false
+  # Formato da economia na quantia singular
+  singular: drakonio
+  # Formato da economia no plural
+  plural: drakonios
+  # Tag do Lorde Dragão mais rico
+  tag: '&c🔥'
+
+# Configuração do top de Lordes Dragão no chat
+top-chat:
+  # O plugin irá reconhecer quando isto for apenas espaços e vai removê-los.
+  rich-format: '{currency} '
+  # O plugin irá reconhecer quando isto for apenas espaços e vai removê-los.
+  prefix-format: '%luckperms_prefix% '
+  tags: '{rich}{prefix}'
+  format: '  &f{pos}º {tags}&7{player}&c: &6{currency}'
+  message:
+  - '&cTop 10 Lordes Dragão &7(O tesouro é contado a cada 10 minutos)'
+  - ''
+  - '{format}'
+  - ''
+
+# Mensagens dracônicas do plugin
+messages:
+  permission: '&cVocê não tem poder para executar este comando.'
+  target: '&cEste lorde não foi encontrado nos reinos conhecidos.'
+  number: '&cO argumento não é um número válido para o tesouro.'
+  has: '&cVocê não possui esta quantia de drakonios em seu tesouro.'
+  yourself: '&cVocê não pode transferir drakonios para si mesmo.'
+  force-update: '&aVocê forçou a recontagem do tesouro dos Lordes Dragão.'
+  balance: |
+    &6Seu tesouro contém: &e{currency}&6 {unit}.
+  balance-target: |
+    &6O tesouro de &7{player}&6 contém: &e{currency}&6 {unit}.
+  set: |
+    &aVocê definiu o tesouro de &7{player} &apara: &e{currency}&a {unit}.
+  remove: |
+    &cVocê pilhou &e{currency}&c {unit} do tesouro de &7{player}&c.
+  add: |
+    &aVocê concedeu &e{currency}&a {unit} para o tesouro de &7{player}&a.
+  send: |
+    &aVocê transferiu &e{currency}&a {unit} para o tesouro de &7{player}&a.
+  received: |
+    &aVocê recebeu &e{currency}&a {unit} de &7{player}&a em seu tesouro.
+  help: |
+    &c<--> Comandos Dracônicos <-->
+    <nl>
+    - '&f > &c/drakonios &8- &7Ver a vastidão do seu tesouro.
+    - '&f > &c/drakonios &f<jogador> &8- &7Espiar o tesouro de outro lorde.
+    - '&f > &c/drakonios enviar &f<jogador> <quantia> &8- &7Transferir drakonios para outro lorde.
+    - '&f > &c/drakonios top &8- &7Ver os Lordes Dragão mais poderosos.
+    <nl>
+  help-admin: |
+    &c<--> Comandos do Arquidragão &7(STAFF)&c <-->
+    <nl>
+    &f > &c/drakonios &8- &7Ver a vastidão do seu tesouro.
+    &f > &c/drakonios &f<jogador> &8- &7Espiar o tesouro de outro lorde.
+    &f > &c/drakonios enviar &f<jogador> <quantia> &8- &7Transferir drakonios para um lorde.
+    &f > &c/drakonios adicionar &f<jogador> <quantia> &8- &7Conceder drakonios a um lorde.
+    &f > &c/drakonios remover &f<jogador> <quantia> &8- &7Pilhar drakonios de um lorde.
+    &f > &c/drakonios setar &f<jogador> <quantia> &8- &7Definir o tesouro de um lorde.
+    &f > &c/drakonios top &8- &7Ver os Lordes Dragão mais poderosos.
+    &f > &c/drakonios forceupdate &8- &7Forçar a recontagem de todos os tesouros.
+    <nl>
+  rich: |
+    <nl>
+    &c&l🔥&6 O Lorde Dragão &e{player} &6reivindicou o maior tesouro do reino!
+    &7Seu tesouro agora contém &e{currency} &7{unit}.
+    <nl>
+  check-give: |
+    &aVocê forjou uma &cEscama de Drakonio&a no valor de &e{currency}&a {unit} para &7{player}&a.
+  check-converted: |
+    &aVocê fundiu suas Escamas de Drakonio em seu tesouro.
+  check-activated: |
+    &aVocê absorveu o poder de uma Escama de Drakonio, adicionando &e{amount}&a {unit} ao seu tesouro.
+# Item da Escama de Drakonio
+check:
+  material: MAGMA_CREAM
+  name: '&cEscama de Drakonio'
+  lore:
+  - ''
+  - ' &c&l| &fPoder: &e{amount}'
+  - ''
+
+menu:
+  top:
+    name: '&cTávola dos Lordes Dragão'
+    size: 36
+    slots:
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    back-slot: 31
+    previous-slot: 9
+    next-slot: 17
+    # Item do top
+    item:
+      material: '{player}'
+      name: '&f#{pos} &7> &c{player}'
+      lore:
+      - ''
+      - '&fTesouro: &e{currency}&f.'
+      - ''
+    # Seta de voltar
+    back-item:
+      material: ARROW
+      name: '&cVoltar'
+      lore:
+      - '&7Clique para voltar ao menu anterior.'
+    previous-item:
+      material: ARROW
+      name: '&cAnterior'
+      lore:
+      - '&7Clique para ir à página anterior.'
+    next-item:
+      material: ARROW
+      name: '&aPróximo'
+      lore:
+      - '&7Clique para ir à próxima página.'
+  main:
+    name: '&6Tesouro de Drakonio'
+    size: 27
+    # Item de informações
+    item:
+      slot: 11
+      material: '{player}'
+      name: '&eSeu Tesouro'
+      lore:
+      - '&7Inspecione a vastidão'
+      - '&7do seu tesouro dracônico.'
+      - ''
+      - ' &fTesouro total: &e{currency}&f.'
+      - ''
+    # Item do top
+    top:
+      slot: 15
+      material: 351137e11443a8fbb05fcd3ccc1af9bd2303918f35448185e3ed96ef184da
+      name: '&cLordes Dragão'
+      lore:
+      - '&7Contemple os Lordes Dragão'
+      - '&7cujos tesouros superam'
+      - '&7todos os outros no reino.'
+      - ''
+      - '&eClique para testemunhar a glória deles.'

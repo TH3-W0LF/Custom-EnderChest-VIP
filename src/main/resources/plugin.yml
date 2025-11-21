@@ -1,0 +1,25 @@
+name: CustomEnderChest
+version: '1.0'
+main: org.dark.customenderchest.CustomEnderChest
+api-version: 1.21
+softdepend: [LuckPerms, yPlugins]
+loadafter: [yPlugins]
+authors: [Dark, MestreBR]
+libraries:
+  - com.zaxxer:HikariCP:5.1.0
+  - org.xerial:sqlite-jdbc:3.45.1.0
+  - org.slf4j:slf4j-simple:2.0.9
+commands:
+  ec:
+    description: Abre seu EnderChest virtual
+    aliases: [bau]
+  aec:
+    description: Comandos de Admin do EnderChest
+    permission: meuplugin.admin
+  ececonomy:
+    description: Debug da economia
+    permission: meuplugin.admin
+permissions:
+  meuplugin.admin:
+    description: Permissão administrativa completa
+    default: op

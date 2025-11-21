@@ -1,0 +1,102 @@
+# Configuração Principal do CustomEnderChest
+
+# Configuração de Economia
+economy:
+  use-ystore: true # Tenta usar a API yPlugins/yEconomias
+  currency-name: "Drakonio" # Apenas visual para as mensagens de erro/sucesso
+
+# Configurações de Segurança
+security:
+  password-timeout: 30 # Segundos para digitar a senha antes de cancelar
+  max-attempts: 5 # Máximo de tentativas falhas antes de punir
+  punishments:
+    1: 60    # Nível 1: 1 hora
+    2: 180   # Nível 2: 3 horas
+    3: 1440  # Nível 3: 24 horas
+
+# Definição dos Botões da GUI
+gui:
+  buttons:
+    previous-page:
+      slot: 45
+      material: ARROW
+      name: "<yellow>Página Anterior"
+      custom_model_data: 0
+      lore:
+        - "<gray>Voltar para a página anterior"
+    
+    next-page:
+      slot: 53
+      material: ARROW
+      name: "<yellow>Próxima Página"
+      custom_model_data: 0
+      lore:
+        - "<gray>Ir para a próxima página"
+    
+    sort:
+      slot: 49
+      material: HOPPER
+      name: "<gold>Auto-Organizar"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para agrupar e ordenar itens"
+    
+    password:
+      slot: 48
+      material: NAME_TAG
+      name: "<aqua>Segurança / Senha"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para gerenciar sua senha"
+        - "<gray>Proteja seus itens!"
+    
+    upgrade:
+      slot: 50
+      material: EMERALD
+      name: "<green>Upgrades"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para comprar mais páginas"
+        - "<yellow>Expanda seu armazenamento!"
+
+# Configuração do Menu de Upgrades
+upgrades:
+  back-button:
+    material: ARROW
+    name: "<red>Voltar"
+    lore:
+      - "<gray>Clique para voltar ao EnderChest"
+  
+  # Item físico de upgrade (Paper para ItemsAdder)
+  tier-item:
+    material: PAPER
+    name: "<#b57edc>Cristal de Tier <tier>"
+    custom_model_data: 1000 # Exemplo, mude conforme necessário
+    lore:
+      - "<gray>Use este item para liberar"
+      - "<gray>a Página <tier> do EnderChest."
+  
+  # Slots dos Tiers (20-24, 29-33) mapeados para níveis
+  tiers:
+    2: 20 # Página 2 -> Slot 20
+    3: 21
+    4: 22
+    5: 23
+    6: 24
+    7: 29
+    8: 30
+    9: 31
+    10: 32
+    11: 33
+
+# Mensagens (Suporta MiniMessage <tag>)
+messages:
+  no-permission: "<red>Você não tem permissão."
+  password-set: "<green>Senha definida com sucesso!"
+  password-removed: "<green>Senha removida."
+  password-request: "<yellow>Este EnderChest é protegido. Digite sua senha no chat:"
+  password-timeout: "<red>Tempo esgotado para digitar a senha."
+  password-correct: "<green>Senha correta!"
+  password-incorrect: "<red>Senha incorreta! Tentativas: <current>/<max>"
+  password-locked: "<dark_red>Muitas tentativas falhas! Bloqueado por <time> minutos."
+  operation-cancelled: "<red>Operação cancelada."

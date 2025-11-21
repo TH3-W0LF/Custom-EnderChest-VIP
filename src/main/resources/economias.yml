@@ -1,0 +1,53 @@
+# Configuração de Economias do yEconomias
+# Configure aqui qual economia você deseja usar para o EnderChest
+
+# ============================================
+# CONFIGURAÇÃO DO PROVIDER
+# ============================================
+# IMPORTANTE: Use o NOME do provider, NÃO o yplugins-id!
+#
+# Para descobrir o nome correto:
+# 1. Execute /ececonomy no jogo
+# 2. Veja a seção "Providers disponíveis:"
+# 3. Use o nome que aparece na lista
+#
+# Exemplo comum:
+# - Se você tem a economia "Drakonio", use: "drakonio"
+# - Se você tem a economia "Money", use: "money"
+# - Se você tem múltiplas economias, elas serão listadas
+#
+# NOTA: O yEconomias pode estar instalado como plugin separado
+#       ou como módulo dentro do yPlugins. Ambos funcionam!
+#
+economy-name: "drakonio"
+
+# Nome de exibição da moeda (para mensagens)
+display-name: "Drakonio"
+
+# Nome abreviado
+abbreviated: "drakonio"
+
+# Se você usar Vault como fallback quando yEconomias não estiver disponível
+use-vault-fallback: true
+
+# Preços dos Upgrades de Tier
+# Formato: tier: preço
+upgrade-prices:
+  2: 1000    # Tier 2 = 1.000
+  3: 2000    # Tier 3 = 2.000
+  4: 4000    # Tier 4 = 4.000
+  5: 8000    # Tier 5 = 8.000
+  6: 16000   # Tier 6 = 16.000
+  7: 32000   # Tier 7 = 32.000
+  8: 64000   # Tier 8 = 64.000
+  9: 128000  # Tier 9 = 128.000
+  10: 256000 # Tier 10 = 256.000
+  11: 512000 # Tier 11 = 512.000
+
+# Mensagens personalizadas para economia
+messages:
+  purchase-success: "<green>✔ Você comprou o Cristal de Tier <tier>!"
+  purchase-fail: "<red>✘ Saldo insuficiente! Necessário: <price> <currency>"
+  tier-already-owned: "<yellow>⚠ Você já possui este Tier ou superior!"
+  tier-activated: "<gradient:#00FF00:#00AA00>✔ Tier <tier> ativado! Seu EnderChest foi expandido.</gradient>"
+
