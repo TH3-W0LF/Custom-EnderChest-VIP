@@ -1,6 +1,5 @@
 package org.dark.customenderchest;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.commands.CommandAEC;
 import org.dark.customenderchest.commands.CommandEC;
@@ -30,13 +29,12 @@ public class CustomEnderChest extends JavaPlugin {
         getLogger().info("CustomEnderChest VIP 1.0 - Iniciando...");
         getLogger().info("========================================");
 
-        // REGISTRA O HOOK DIRETO DO yEconomias (SEM VAULT) - FORÇADO
-        if (!org.dark.customenderchest.economy.DrakonioEconomyHook.setup(this)) {
-            getLogger().severe("========================================");
-            getLogger().severe("PLUGIN DESABILITADO: Falha ao conectar com a economia DRAKONIO");
-            getLogger().severe("========================================");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+        // REGISTRA O HOOK DIRETO DO yEconomias (SEM VAULT) - COM RETRY AUTOMÁTICO
+        boolean ok = org.dark.customenderchest.economy.DrakonioEconomyHook.setup(this);
+        if (!ok) {
+            // O setup pode retornar false porque a conexão será tentada em retry (2 segundos);
+            // O hook fará o disable automaticamente se falhar após o retry
+            getLogger().info("[ECONOMY] Aguardando retry automático em 2 segundos...");
         }
         
         databaseManager = new DatabaseManager(this);
@@ -52,18 +50,25 @@ public class CustomEnderChest extends JavaPlugin {
         getCommand("ec").setExecutor(new CommandEC(enderChestManager, databaseManager, passwordConversation));
         getCommand("aec").setExecutor(new CommandAEC(enderChestManager, databaseManager));
         
-        // Inicializa a economia (hook já garantiu que está conectado)
-        drakonioEconomy = new DrakonioEconomy(this);
-        enderChestManager.setDrakonioEconomy(drakonioEconomy);
-        inventoryListener.setDrakonioEconomy(drakonioEconomy);
-        
-        // Comando de debug da economia
-        commandEconomy = new CommandEconomy(this, drakonioEconomy);
-        getCommand("ececonomy").setExecutor(commandEconomy);
-
-        getLogger().info("========================================");
-        getLogger().info("CustomEnderChest VIP 1.0 carregado com sucesso!");
-        getLogger().info("========================================");
+        // Aguarda 3 segundos para garantir que o hook conectou (incluindo retry)
+        getServer().getScheduler().runTaskLater(this, () -> {
+            // Inicializa a economia (hook já deve ter conectado)
+            drakonioEconomy = new DrakonioEconomy(this);
+            enderChestManager.setDrakonioEconomy(drakonioEconomy);
+            inventoryListener.setDrakonioEconomy(drakonioEconomy);
+            
+            // Comando de debug da economia
+            commandEconomy = new CommandEconomy(this, drakonioEconomy);
+            getCommand("ececonomy").setExecutor(commandEconomy);
+            
+            if (drakonioEconomy.isConnected()) {
+                getLogger().info("========================================");
+                getLogger().info("CustomEnderChest VIP 1.0 carregado com sucesso!");
+                getLogger().info("========================================");
+            } else {
+                getLogger().warning("Economia ainda não conectada. O hook tentará novamente...");
+            }
+        }, 60L); // 3 segundos (60 ticks)
     }
 
     @Override

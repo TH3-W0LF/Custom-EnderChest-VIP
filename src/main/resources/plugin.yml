@@ -2,8 +2,13 @@ name: CustomEnderChest
 version: '1.0'
 main: org.dark.customenderchest.CustomEnderChest
 api-version: 1.21
-softdepend: [LuckPerms, yPlugins]
-loadafter: [yPlugins]
+softdepend:
+  - yEconomias
+  - yPlugins
+  - LuckPerms
+depend:
+  - yPlugins
+loadafter: [yPlugins, yEconomias]
 authors: [Dark, MestreBR]
 libraries:
   - com.zaxxer:HikariCP:5.1.0
