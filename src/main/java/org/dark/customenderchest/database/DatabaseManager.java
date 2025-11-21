@@ -3,7 +3,7 @@ package org.dark.customenderchest.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.utils.ItemSerializer;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,10 +14,10 @@ import java.util.logging.Level;
 
 public class DatabaseManager {
 
-    private final CustomEnderChest plugin;
+    private final JavaPlugin plugin;
     private HikariDataSource dataSource;
 
-    public DatabaseManager(CustomEnderChest plugin) {
+    public DatabaseManager(JavaPlugin plugin) {
         this.plugin = plugin;
         initDatabase();
     }

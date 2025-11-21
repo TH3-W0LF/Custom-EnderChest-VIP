@@ -1,6 +1,6 @@
 package org.dark.customenderchest.utils;
 
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +14,7 @@ public class LogUtils {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static File logFile;
 
-    public static void init(CustomEnderChest plugin) {
+    public static void init(JavaPlugin plugin) {
         logFile = new File(plugin.getDataFolder(), "admin_logs.txt");
         if (!logFile.exists()) {
             try {

@@ -1,18 +1,20 @@
 package org.dark.customenderchest;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.commands.CommandAEC;
 import org.dark.customenderchest.commands.CommandEC;
 import org.dark.customenderchest.commands.CommandEconomy;
 import org.dark.customenderchest.database.DatabaseManager;
 import org.dark.customenderchest.economy.DrakonioEconomy;
+import org.dark.customenderchest.economy.DrakonioEconomyHook;
 import org.dark.customenderchest.listeners.EnderChestBlockListener;
 import org.dark.customenderchest.listeners.InventoryListener;
 import org.dark.customenderchest.manager.EnderChestManager;
 import org.dark.customenderchest.utils.LogUtils;
 import org.dark.customenderchest.utils.PasswordConversation;
 
-public class CustomEnderChest extends JavaPlugin {
+public class Main extends JavaPlugin {
 
     private DatabaseManager databaseManager;
     private EnderChestManager enderChestManager;
@@ -22,21 +24,20 @@ public class CustomEnderChest extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getLogger().info("CustomEnderChest VIP - Iniciando...");
+
+        // Setup da economia (com retry automático)
+        boolean ok = DrakonioEconomyHook.setup(this);
+        if (!ok) {
+            getLogger().warning("[CustomEnderChest] Economia não conectada na primeira tentativa. Aguardando retry...");
+        } else {
+            getLogger().info("[CustomEnderChest] Economia drakonio conectada com sucesso.");
+        }
+
+        // Resto do onEnable
         saveDefaultConfig();
         LogUtils.init(this);
 
-        getLogger().info("========================================");
-        getLogger().info("CustomEnderChest VIP 1.0 - Iniciando...");
-        getLogger().info("========================================");
-
-        // REGISTRA O HOOK DIRETO DO yEconomias (SEM VAULT) - COM RETRY AUTOMÁTICO
-        boolean ok = org.dark.customenderchest.economy.DrakonioEconomyHook.setup(this);
-        if (!ok) {
-            // O setup pode retornar false porque a conexão será tentada em retry (2 segundos);
-            // O hook fará o disable automaticamente se falhar após o retry
-            getLogger().info("[ECONOMY] Aguardando retry automático em 2 segundos...");
-        }
-        
         databaseManager = new DatabaseManager(this);
         enderChestManager = new EnderChestManager(this, databaseManager);
         PasswordConversation passwordConversation = new PasswordConversation(this, enderChestManager, databaseManager);
@@ -79,3 +80,4 @@ public class CustomEnderChest extends JavaPlugin {
         getLogger().info("CustomEnderChest desativado.");
     }
 }
+

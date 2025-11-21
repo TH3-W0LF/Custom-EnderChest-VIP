@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.database.DatabaseManager;
 import org.dark.customenderchest.utils.ItemBuilder;
 
@@ -22,13 +22,13 @@ import java.util.*;
 
 public class EnderChestManager {
 
-    private final CustomEnderChest plugin;
+    private final JavaPlugin plugin;
     private final DatabaseManager databaseManager;
     private final Map<UUID, Location> openedBlocks = new HashMap<>();
     private final MiniMessage mm = MiniMessage.miniMessage();
     private org.dark.customenderchest.economy.DrakonioEconomy drakonioEconomy;
 
-    public EnderChestManager(CustomEnderChest plugin, DatabaseManager databaseManager) {
+    public EnderChestManager(JavaPlugin plugin, DatabaseManager databaseManager) {
         this.plugin = plugin;
         this.databaseManager = databaseManager;
     }

@@ -1,13 +1,14 @@
 name: CustomEnderChest
-version: '1.0'
-main: org.dark.customenderchest.CustomEnderChest
+version: 1.0
+main: org.dark.customenderchest.Main
 api-version: 1.21
+# Ordem de carregamento
+depend:
+  - yPlugins
 softdepend:
   - yEconomias
   - yPlugins
   - LuckPerms
-depend:
-  - yPlugins
 loadafter: [yPlugins, yEconomias]
 authors: [Dark, MestreBR]
 libraries:

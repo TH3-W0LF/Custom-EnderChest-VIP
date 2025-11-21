@@ -7,16 +7,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.economy.DrakonioEconomy;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandEconomy implements CommandExecutor {
 
-    private final CustomEnderChest plugin;
+    private final JavaPlugin plugin;
     private DrakonioEconomy drakonioEconomy;
 
-    public CommandEconomy(CustomEnderChest plugin, DrakonioEconomy drakonioEconomy) {
+    public CommandEconomy(JavaPlugin plugin, DrakonioEconomy drakonioEconomy) {
         this.plugin = plugin;
         this.drakonioEconomy = drakonioEconomy;
     }

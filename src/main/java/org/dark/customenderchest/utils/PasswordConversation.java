@@ -6,7 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.database.DatabaseManager;
 import org.dark.customenderchest.manager.EnderChestManager;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 
 public class PasswordConversation {
 
-    private final CustomEnderChest plugin;
+    private final JavaPlugin plugin;
     private final EnderChestManager enderChestManager;
     private final DatabaseManager databaseManager;
     private final MiniMessage mm = MiniMessage.miniMessage();
 
-    public PasswordConversation(CustomEnderChest plugin, EnderChestManager enderChestManager, DatabaseManager databaseManager) {
+    public PasswordConversation(JavaPlugin plugin, EnderChestManager enderChestManager, DatabaseManager databaseManager) {
         this.plugin = plugin;
         this.enderChestManager = enderChestManager;
         this.databaseManager = databaseManager;

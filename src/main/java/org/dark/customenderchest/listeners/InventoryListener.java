@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.dark.customenderchest.CustomEnderChest;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.database.DatabaseManager;
 import org.dark.customenderchest.economy.DrakonioEconomy;
 import org.dark.customenderchest.manager.EnderChestHolder;
@@ -33,13 +33,13 @@ import java.util.List;
 
 public class InventoryListener implements Listener {
 
-    private final CustomEnderChest plugin;
+    private final JavaPlugin plugin;
     private final EnderChestManager enderChestManager;
     private final DatabaseManager databaseManager;
     private DrakonioEconomy drakonioEconomy; // Não final pois será injetado depois
     private final MiniMessage mm = MiniMessage.miniMessage();
 
-    public InventoryListener(CustomEnderChest plugin, EnderChestManager enderChestManager, DatabaseManager databaseManager, DrakonioEconomy drakonioEconomy) {
+    public InventoryListener(JavaPlugin plugin, EnderChestManager enderChestManager, DatabaseManager databaseManager, DrakonioEconomy drakonioEconomy) {
         this.plugin = plugin;
         this.enderChestManager = enderChestManager;
         this.databaseManager = databaseManager;
