@@ -1,10 +1,11 @@
 package org.dark.customenderchest.economy;
 
-import br.com.ystoreplugins.product.economy.EconomyProvider;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class DrakonioEconomy {
 
     private final JavaPlugin plugin;
-    private EconomyProvider yEconomy;
+    private Economy vaultEconomy;
     private String currencyName;
     private FileConfiguration economiasConfig;
 
@@ -45,53 +46,59 @@ public class DrakonioEconomy {
     }
 
     public void reloadConfig() {
-        this.currencyName = economiasConfig.getString("display-name", "Drakonio");
+        this.currencyName = economiasConfig.getString("display-name", "Money");
     }
 
     private void setupEconomy() {
-        // Usa o provider do hook direto (já foi registrado no onEnable)
-        yEconomy = DrakonioEconomyHook.getProvider();
-        
-        if (yEconomy != null) {
-            plugin.getLogger().info("======================================");
-            plugin.getLogger().info("✓ Sistema de economia inicializado!");
-            plugin.getLogger().info("✓ Usando provider do DrakonioEconomyHook");
-            plugin.getLogger().info("✓ Nome: " + yEconomy.getName());
-            plugin.getLogger().info("======================================");
-        } else {
-            plugin.getLogger().warning("⚠ Provider não encontrado no hook!");
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            plugin.getLogger().warning("======================================");
+            plugin.getLogger().warning("⚠ Vault não encontrado!");
+            plugin.getLogger().warning("O sistema de economia não funcionará.");
+            plugin.getLogger().warning("======================================");
+            return;
         }
+
+        RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            plugin.getLogger().warning("======================================");
+            plugin.getLogger().warning("⚠ Nenhum provedor de economia encontrado no Vault!");
+            plugin.getLogger().warning("Certifique-se de que um plugin de economia está instalado.");
+            plugin.getLogger().warning("======================================");
+            return;
+        }
+
+        vaultEconomy = rsp.getProvider();
+        plugin.getLogger().info("======================================");
+        plugin.getLogger().info("✓ Sistema de economia inicializado!");
+        plugin.getLogger().info("✓ Usando Vault: " + vaultEconomy.getName());
+        plugin.getLogger().info("======================================");
     }
 
     public boolean has(UUID uuid, double amount) {
-        if (yEconomy == null) {
-            plugin.getLogger().severe("✘ ERRO: Economia 'drakonio' não está conectada!");
+        if (vaultEconomy == null) {
             return false;
         }
         
-        String playerName = getPlayerName(uuid);
-        boolean has = yEconomy.has(playerName, amount);
-        double balance = yEconomy.get(playerName);
-        plugin.getLogger().info("Verificando saldo de " + playerName + ": " + balance + " " + currencyName + " (precisa: " + amount + ") = " + has);
-        return has;
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        return vaultEconomy.has(player, amount);
     }
 
     public void withdraw(UUID uuid, double amount) {
         if (amount < 0) return;
         
-        if (yEconomy == null) {
-            plugin.getLogger().severe("✘ ERRO: Tentou retirar " + amount + " mas a economia 'drakonio' não está conectada!");
+        if (vaultEconomy == null) {
+            plugin.getLogger().severe("✘ ERRO: Tentou retirar " + amount + " mas o Vault não está conectado!");
             return;
         }
         
-        String playerName = getPlayerName(uuid);
-        double balanceBefore = yEconomy.get(playerName);
-        yEconomy.remove(playerName, amount);
-        double balanceAfter = yEconomy.get(playerName);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        double balanceBefore = vaultEconomy.getBalance(player);
+        vaultEconomy.withdrawPlayer(player, amount);
+        double balanceAfter = vaultEconomy.getBalance(player);
         
         plugin.getLogger().info("======================================");
         plugin.getLogger().info("RETIRADA DE " + currencyName.toUpperCase());
-        plugin.getLogger().info("Jogador: " + playerName);
+        plugin.getLogger().info("Jogador: " + player.getName());
         plugin.getLogger().info("Saldo anterior: " + balanceBefore);
         plugin.getLogger().info("Valor retirado: " + amount);
         plugin.getLogger().info("Saldo atual: " + balanceAfter);
@@ -99,35 +106,31 @@ public class DrakonioEconomy {
     }
 
     public double getBalance(UUID uuid) {
-        if (yEconomy == null) {
-            plugin.getLogger().severe("✘ ERRO: Economia 'drakonio' não está conectada!");
+        if (vaultEconomy == null) {
             return 0.0;
         }
         
-        String playerName = getPlayerName(uuid);
-        double balance = yEconomy.get(playerName);
-        plugin.getLogger().info("Consultando saldo de " + playerName + ": " + balance + " " + currencyName);
-        return balance;
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        return vaultEconomy.getBalance(player);
     }
 
     // Métodos auxiliares
     public void deposit(UUID uuid, double amount) {
         if (amount < 0) return;
         
-        if (yEconomy == null) {
-            plugin.getLogger().severe("✘ ERRO: Tentou depositar " + amount + " mas a economia 'drakonio' não está conectada!");
+        if (vaultEconomy == null) {
+            plugin.getLogger().severe("✘ ERRO: Tentou depositar " + amount + " mas o Vault não está conectado!");
             return;
         }
 
-        yEconomy.add(getPlayerName(uuid), amount);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        vaultEconomy.depositPlayer(player, amount);
     }
     
-    private String getPlayerName(UUID uuid) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        return player.getName(); // yEconomias usa String
-    }
-
     public String getCurrencyName() {
+        if (vaultEconomy != null) {
+            return vaultEconomy.currencyNameSingular();
+        }
         return currencyName;
     }
     
@@ -140,11 +143,11 @@ public class DrakonioEconomy {
     }
     
     public boolean isConnected() {
-        return yEconomy != null;
+        return vaultEconomy != null;
     }
     
     public void reconnect() {
-        plugin.getLogger().info("Tentando reconectar ao yEconomias...");
+        plugin.getLogger().info("Tentando reconectar ao Vault...");
         setupEconomy();
     }
 }

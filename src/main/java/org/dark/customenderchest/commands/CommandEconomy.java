@@ -1,12 +1,14 @@
 package org.dark.customenderchest.commands;
 
-import br.com.ystoreplugins.product.economy.EconomyProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dark.customenderchest.economy.DrakonioEconomy;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +35,7 @@ public class CommandEconomy implements CommandExecutor {
         }
 
         if (args.length > 0 && args[0].equalsIgnoreCase("reconnect")) {
-            sender.sendMessage(Component.text("Tentando reconectar ao yEconomias...", NamedTextColor.YELLOW));
+            sender.sendMessage(Component.text("Tentando reconectar ao Vault...", NamedTextColor.YELLOW));
             if (drakonioEconomy != null) {
                 drakonioEconomy.reconnect();
             } else {
@@ -45,17 +47,10 @@ public class CommandEconomy implements CommandExecutor {
         sender.sendMessage(Component.text("========== DEBUG ECONOMIA ==========", NamedTextColor.GOLD));
         sender.sendMessage(Component.empty());
         
-        // Status do yEconomias (pode estar standalone ou como módulo do yPlugins)
-        boolean yPluginsInstalled = plugin.getServer().getPluginManager().getPlugin("yPlugins") != null;
-        boolean yEconomiasStandalone = plugin.getServer().getPluginManager().getPlugin("yEconomias") != null;
-        
-        if (yPluginsInstalled) {
-            sender.sendMessage(Component.text("yPlugins detectado: ✓ SIM (yEconomias como módulo)", NamedTextColor.GREEN));
-        } else if (yEconomiasStandalone) {
-            sender.sendMessage(Component.text("yEconomias detectado: ✓ SIM (standalone)", NamedTextColor.GREEN));
-        } else {
-            sender.sendMessage(Component.text("yEconomias/yPlugins: ✘ NÃO DETECTADO", NamedTextColor.RED));
-        }
+        // Status do Vault
+        boolean vaultInstalled = Bukkit.getPluginManager().getPlugin("Vault") != null;
+        sender.sendMessage(Component.text("Vault instalado: " + (vaultInstalled ? "✓ SIM" : "✘ NÃO"),
+            vaultInstalled ? NamedTextColor.GREEN : NamedTextColor.RED));
         
         // Status da economia
         boolean connected = drakonioEconomy != null && drakonioEconomy.isConnected();
@@ -74,23 +69,15 @@ public class CommandEconomy implements CommandExecutor {
         sender.sendMessage(Component.empty());
         sender.sendMessage(Component.text("Providers disponíveis:", NamedTextColor.GOLD));
         
-        // Busca diretamente no ServicesManager
-        var registrations = plugin.getServer().getServicesManager().getRegistrations(EconomyProvider.class);
-        sender.sendMessage(Component.text("Total no ServicesManager: " + registrations.size(), NamedTextColor.GRAY));
-        
-        if (registrations.isEmpty()) {
+        // Busca no ServicesManager do Vault
+        RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
             sender.sendMessage(Component.text("  ✘ Nenhum provider encontrado!", NamedTextColor.RED));
-            sender.sendMessage(Component.text("  Verifique se o hook foi executado nos logs.", NamedTextColor.GRAY));
+            sender.sendMessage(Component.text("  Instale um plugin de economia compatível com Vault.", NamedTextColor.GRAY));
         } else {
-            registrations.forEach(reg -> {
-                EconomyProvider provider = reg.getProvider();
-                String name = provider.getName();
-                String className = provider.getClass().getSimpleName();
-                boolean isDrakonio = name.toLowerCase().equals("drakonio");
-                
-                sender.sendMessage(Component.text("  → " + name + " (" + className + ")", 
-                    isDrakonio ? NamedTextColor.GREEN : NamedTextColor.WHITE));
-            });
+            Economy economy = rsp.getProvider();
+            sender.sendMessage(Component.text("  → " + economy.getName() + " (" + economy.getClass().getSimpleName() + ")", 
+                NamedTextColor.GREEN));
         }
         
         sender.sendMessage(Component.empty());
@@ -102,4 +89,3 @@ public class CommandEconomy implements CommandExecutor {
         return true;
     }
 }
-
