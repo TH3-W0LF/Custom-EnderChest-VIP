@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2024 MestreBR - Todos os direitos reservados.
+ * 
+ * Este software é propriedade exclusiva de MestreBR (Desenvolvedor).
+ * Desenvolvido exclusivamente para uso no servidor DrakkarMC (www.drakkarmc.com.br).
+ * 
+ * É PROIBIDO distribuir, copiar, modificar ou usar este plugin sem autorização expressa.
+ */
+
 package org.dark.customenderchest;
 
 import org.bukkit.plugin.java.JavaPlugin;

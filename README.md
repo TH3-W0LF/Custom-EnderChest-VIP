@@ -9,22 +9,21 @@ Plugin de EnderChest personalizado para Minecraft com sistema de múltiplas pág
 - ✅ **Itens Físicos**: Cristais de tier podem ser comercializados entre jogadores
 - ✅ **Sistema de Senha**: Proteja seu EnderChest com senha
 - ✅ **Auto-Organização**: Organize seus itens automaticamente
-- ✅ **Integração yEconomias**: Hook direto com economia "drakonio" (sem Vault)
+- ✅ **Integração Vault**: Sistema de economia via Vault
 - ✅ **Sistema de Permissões**: Tiers baseados em permissões VIP
 
 ## 📋 Requisitos
 
 - **Minecraft**: 1.21+
-- **yPlugins/yEconomias**: Plugin obrigatório
-- **Economia "drakonio"**: Deve estar configurada no yEconomias
+- **Vault**: Plugin recomendado (softdepend)
+- **Plugin de Economia**: Qualquer plugin compatível com Vault (EssentialsX, CMI, etc.)
 
 ## 🚀 Instalação
 
 1. Baixe o arquivo `CustomEnderChest-1.0-SNAPSHOT.jar` da pasta `target/`
 2. Copie para a pasta `plugins/` do seu servidor
-3. Certifique-se de que o **yPlugins/yEconomias** está instalado
-4. Verifique se existe `/plugins/yEconomias/economias/drakonio.yml`
-5. Reinicie o servidor
+3. Certifique-se de que o **Vault** e um **plugin de economia** estão instalados
+4. Reinicie o servidor
 
 ## ⚙️ Configuração
 
@@ -71,11 +70,12 @@ Configure os botões da GUI, mensagens e sistema de segurança em `plugins/Custo
 
 ## 💰 Sistema de Economia
 
-O plugin usa **hook direto** do yEconomias, sem passar pelo Vault:
+O plugin usa **Vault** para integração com sistemas de economia:
 
-- Conecta automaticamente à economia "drakonio"
-- Se não conseguir conectar, o plugin é desabilitado
+- Conecta automaticamente ao provider de economia via Vault
+- Funciona com qualquer plugin de economia compatível (EssentialsX, CMI, etc.)
 - Todos os preços são configuráveis no `economias.yml`
+- Se o Vault não estiver instalado, o plugin funciona sem economia
 
 ## 📦 Como Funciona
 
@@ -110,7 +110,7 @@ O arquivo JAR será gerado em `target/CustomEnderChest-1.0-SNAPSHOT.jar`
 src/main/java/org/dark/customenderchest/
 ├── commands/          # Comandos do plugin
 ├── database/          # Gerenciamento do banco de dados
-├── economy/           # Sistema de economia (yEconomias)
+├── economy/           # Sistema de economia (Vault)
 ├── listeners/         # Event listeners
 ├── manager/           # Gerenciadores principais
 └── utils/             # Utilitários
@@ -135,8 +135,8 @@ O plugin gera logs extensivos para debug:
 ### Economia não conecta
 
 - Execute `/ececonomy` para ver o status
-- Verifique se `drakonio.yml` existe no yEconomias
-- Confirme que o `plugin-id` está correto
+- Verifique se o Vault está instalado
+- Confirme que um plugin de economia compatível está instalado e funcionando
 
 ### Cristais não funcionam
 
@@ -144,21 +144,36 @@ O plugin gera logs extensivos para debug:
 - Veja os logs ao clicar no item
 - Confirme que o nome contém "Tier"
 
-## 📄 Licença
+## 📄 Licença e Copyright
 
-Este projeto é privado e de propriedade de TH3-W0LF.
+**Copyright (c) 2024 MestreBR - Todos os direitos reservados.**
 
-## 👥 Autores
+Este software e código-fonte são propriedade exclusiva de **MestreBR (Desenvolvedor)**.
 
-- **Dark** - Desenvolvimento
-- **MestreBR** - Desenvolvimento e testes
+Este plugin foi desenvolvido **exclusivamente para uso no servidor DrakkarMC** (www.drakkarmc.com.br).
+
+### ⚠️ Restrições
+
+É **PROIBIDO**:
+- Distribuir, copiar, modificar ou vender este plugin sem autorização expressa do desenvolvedor
+- Usar este plugin em outros servidores sem permissão
+- Remover ou alterar notificações de copyright
+- Fazer engenharia reversa ou descompilar o código
+
+Para solicitar permissão de uso ou modificação, entre em contato com o desenvolvedor.
+
+## 👥 Desenvolvedor
+
+- **MestreBR** - Desenvolvedor e Proprietário
 
 ## 🔗 Links
 
+- **Servidor**: www.drakkarmc.com.br
 - **GitHub**: https://github.com/TH3-W0LF/Custom-EnderChest-VIP
 
 ---
 
 **Versão**: 1.0  
-**Última atualização**: 2024
+**Última atualização**: 2024  
+**Servidor Exclusivo**: DrakkarMC (www.drakkarmc.com.br)
 
