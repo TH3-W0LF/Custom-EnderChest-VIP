@@ -1,0 +1,32 @@
+name: AlkaEnderChest
+version: '${version}'
+main: com.alkacode.enderchest.AlkaEnderChestPlugin
+api-version: '1.21'
+author: MestreDEV
+description: EnderChest customizado com paginas por tier, senha e upgrades via AlkaEconomy. Sobre o AlkaCore (banco/HikariCP, GUI de upgrades).
+depend: [AlkaCore, AlkaEconomy]
+softdepend: [LuckPerms, PlaceholderAPI]
+
+commands:
+  ec:
+    description: Abre seu EnderChest customizado
+    aliases: [bau]
+    usage: /<command> [senha|remover|chavemestra]
+  aec:
+    description: Comandos de Admin do EnderChest
+    permission: meuplugin.admin
+    usage: /<command> [ver|resetpass|settier|reload]
+  ececonomy:
+    description: Debug da economia do EnderChest (AlkaEconomy)
+    permission: meuplugin.admin
+
+permissions:
+  meuplugin.admin:
+    description: Permissao administrativa completa do AlkaEnderChest.
+    default: op
+  alkaenderchest.admin:
+    description: Permite gerar Chaves Mestras (/ec chavemestra).
+    default: op
+  alkaenderchest.senha.remover.bypass:
+    description: Permite remover a propria senha do EnderChest sem precisar de Chave Mestra.
+    default: op

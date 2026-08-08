@@ -1,0 +1,72 @@
+# Todas as mensagens do AlkaEnderChest, em MiniMessage (sem codigos de cor legados).
+# Placeholders usam a sintaxe <nome> e sao substituidos por texto simples antes do
+# parse do MiniMessage - nao confundir com tags de formatacao do proprio MiniMessage.
+
+prefix: "<gray>[<gradient:#b57edc:#8b5fbf>AlkaEnderChest</gradient>]</gray> "
+
+general:
+  player-only: "<red>Apenas jogadores podem usar este comando."
+  no-permission: "<red>Voce nao tem permissao."
+  unknown-command: "<red>Comando desconhecido."
+
+password:
+  prompt-command: "<yellow>Este bau esta protegido. Use <white>/ec entrar <senha></white> para acessar. <gray>(<time>s)</gray>"
+  prompt-actionbar: "<yellow><bold>EC</bold></yellow> <gray>»</gray> <white>Digite <yellow>/ec entrar <senha></yellow> <gray>(<time>s)</gray>"
+  entrar-usage: "<red>Uso correto: /ec entrar <senha>"
+  entrar-no-pending: "<red>Voce nao tem nenhum bau pendente. Clique em um Ender Chest protegido primeiro."
+  timeout: "<red>Voce demorou demais. Tente abrir o bau novamente."
+  chat-guard: "<red>Use o comando: <yellow>/ec entrar <senha></yellow>"
+  correct: "<green>Senha correta!"
+  incorrect: "<red>Senha incorreta! Tentativas: <current>/<max>"
+  locked: "<dark_red>Muitas tentativas falhas! Bloqueado por <time> minutos."
+  cancelled: "<red>Operacao cancelada."
+  set: "<green>Senha definida com sucesso! Nao a esqueca."
+  set-usage: "<red>Uso correto: /ec senha <senha> <repetir_senha>"
+  mismatch: "<red>As senhas nao coincidem! Tente novamente."
+  removed: "<green>Senha removida! Seu bau esta desprotegido."
+  not-set: "<red>Voce nao tem uma senha definida."
+  masterkey-used: "<green>Chave Mestra utilizada! Sua senha foi removida."
+  masterkey-required: "<red>Voce precisa de uma Chave Mestra ou de um cargo VIP superior para remover a senha."
+  masterkey-given: "<green>Voce recebeu <amount>x <gold>Chave Mestra</gold>."
+  masterkey-usage: "<red>Uso: /ec chavemestra <jogador> <quantidade>"
+  masterkey-target-not-found: "<red>Jogador nao encontrado."
+  masterkey-invalid-amount: "<red>Quantidade invalida."
+  security-info:
+    - ""
+    - "<gradient:#FFD700:#FFA500><bold>SISTEMA DE SEGURANCA</bold></gradient>"
+    - ""
+    - "<gray>Para definir sua senha, utilize o comando:"
+    - "<yellow>/ec senha <senha> <repetir_senha>"
+    - ""
+    - "<gray>Para remover sua senha, utilize:"
+    - "<yellow>/ec remover"
+
+upgrades:
+  purchase-success: "<green>Voce comprou o Cristal de Tier <tier>!"
+  purchase-fail: "<red>Saldo insuficiente! Necessario: <price> <currency>"
+  tier-already-owned: "<yellow>Voce ja possui este Tier ou superior!"
+  tier-activated: "<gradient:#00FF00:#00AA00>Tier <tier> ativado! Seu EnderChest foi expandido.</gradient>"
+  tier-locked-crystal: "<red>Voce so pode usar o Tier <next>! Complete o Tier <current> primeiro."
+  tier-locked-purchase: "<red>Voce so pode comprar o Tier <next>! Complete o Tier <current> primeiro."
+
+enderchest:
+  sorted: "<green>Itens organizados!"
+  shulker-blocked: "<red>Voce nao pode colocar Shulker Boxes no EnderChest!"
+
+admin:
+  reload-done: "<green>Configuracao (config.yml, messages.yml, economias.yml) recarregada."
+  ec-view-usage: "<red>Uso: /aec ver <nick>"
+  ec-view-not-found: "<red>Jogador nunca jogou neste servidor ou nao encontrado."
+  ec-view-opening: "<green>Abrindo EnderChest de <player> (Modo Edicao)..."
+  resetpass-usage: "<red>Uso: /aec resetpass <nick>"
+  resetpass-done: "<green>Senha de <player> foi removida."
+  settier-usage: "<red>Uso: /aec settier <nick> <nivel>"
+  settier-invalid: "<red>O nivel deve ser um numero inteiro."
+  settier-done: "<green>Tier de <player> definido para <tier>."
+
+economy-debug:
+  header: "<gold>========== DEBUG ECONOMIA =========="
+  alkaeconomy-status: "<gray>AlkaEconomy instalado: <status>"
+  currency: "<aqua>Moeda dos upgrades: <currency>"
+  balance: "<yellow>Seu saldo: <balance>"
+  footer: "<gold>==================================="

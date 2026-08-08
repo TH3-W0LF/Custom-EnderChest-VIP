@@ -1,0 +1,138 @@
+# Configuracao Principal do AlkaEnderChest
+
+# Configuracao de Permissoes VIP (LuckPerms)
+# Define quantas paginas cada permissao VIP concede
+# A ordem importa: o sistema verifica do maior tier para o menor
+permissions:
+  tiers:
+    vip4:
+      permission: "enderchest.vip.4"
+      pages: 5
+    vip3:
+      permission: "enderchest.vip.3"
+      pages: 4
+    vip2:
+      permission: "enderchest.vip.2"
+      pages: 3
+    vip1:
+      permission: "enderchest.vip.1"
+      pages: 2
+    free:
+      permission: "enderchest.free"
+      pages: 1
+
+# Configuracoes de Seguranca
+security:
+  max-attempts: 5
+  # segundos que o jogador tem para digitar a senha no chat antes do prompt expirar.
+  password-timeout-seconds: 30
+  punishments:
+    1: 60
+    2: 180
+    3: 1440
+
+  # Item da Chave Mestra (/ec chavemestra) - reconhecido por uma tag no
+  # PersistentDataContainer, nao pelo nome/material (podem ser customizados aqui).
+  master-key:
+    material: TRIPWIRE_HOOK
+    name: "<gradient:#FFD700:#FFA500>Chave Mestra</gradient>"
+    custom_model_data: 2000
+    lore:
+      - "<gray>Uma chave rara, capaz de remover"
+      - "<gray>a senha do seu EnderChest."
+      - ""
+      - "<yellow>Segure na mao e use /ec remover</yellow>"
+      - "<yellow>para consumi-la.</yellow>"
+
+# Definicao dos Botoes da GUI
+gui:
+  buttons:
+    previous-page:
+      slot: 45
+      material: ARROW
+      name: "<yellow>Pagina Anterior"
+      custom_model_data: 0
+      lore:
+        - "<gray>Voltar para a pagina anterior"
+
+    next-page:
+      slot: 53
+      material: ARROW
+      name: "<yellow>Proxima Pagina"
+      custom_model_data: 0
+      lore:
+        - "<gray>Ir para a proxima pagina"
+
+    sort:
+      slot: 49
+      material: HOPPER
+      name: "<gold>Auto-Organizar"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para agrupar e ordenar itens"
+
+    password:
+      slot: 48
+      material: NAME_TAG
+      name: "<aqua>Seguranca / Senha"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para gerenciar sua senha"
+        - "<gray>Proteja seus itens!"
+
+    upgrade:
+      slot: 50
+      material: EMERALD
+      name: "<green>Upgrades"
+      custom_model_data: 0
+      lore:
+        - "<gray>Clique para comprar mais paginas"
+        - "<yellow>Expanda seu armazenamento!"
+
+# Configuracao do Menu de Upgrades
+upgrades:
+  back-button:
+    material: ARROW
+    name: "<red>Voltar"
+    lore:
+      - "<gray>Clique para voltar ao EnderChest"
+
+  # Item fisico de upgrade (Paper para ItemsAdder)
+  tier-item:
+    material: PAPER
+    name: "<#b57edc>Cristal de Tier <tier>"
+    custom_model_data: 1000
+    lore:
+      - "<gray>Use este item para liberar"
+      - "<gray>a Pagina <tier> do EnderChest."
+
+  # Slots dos Tiers (2-29) mapeados para niveis
+  tiers:
+    2: 10
+    3: 11
+    4: 12
+    5: 13
+    6: 14
+    7: 15
+    8: 16
+    9: 19
+    10: 20
+    11: 21
+    12: 22
+    13: 23
+    14: 24
+    15: 25
+    16: 28
+    17: 29
+    18: 30
+    19: 31
+    20: 32
+    21: 33
+    22: 34
+    23: 37
+    24: 38
+    25: 39
+    26: 40
+    27: 41
+    28: 42
+    29: 43
