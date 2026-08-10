@@ -1,8 +1,10 @@
 package com.alkacode.enderchest.menu;
 
 import com.alkacode.enderchest.database.EnderChestRepository;
+import com.alkacode.enderchest.hook.AlkaVipsHook;
 import com.alkacode.enderchest.manager.EnderChestManager;
 import com.alkacode.enderchest.util.ItemBuilder;
+import com.alkacode.enderchest.util.Messages;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -18,18 +20,27 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class EnderChestMenu {
+    private static final long THREE_DAYS_MILLIS = TimeUnit.DAYS.toMillis(3);
+
     private final EnderChestRepository repository;
     private final JavaPlugin plugin;
     private final EnderChestManager enderChestManager;
+    private final Messages messages;
+    private final Supplier<AlkaVipsHook> alkaVipsHookSupplier;
 
-    public EnderChestMenu(JavaPlugin plugin, EnderChestRepository repository,
-                           EnderChestManager enderChestManager) {
+    public EnderChestMenu(JavaPlugin plugin, EnderChestRepository repository, EnderChestManager enderChestManager,
+                           Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier) {
         this.plugin = plugin;
         this.repository = repository;
         this.enderChestManager = enderChestManager;
+        this.messages = messages;
+        this.alkaVipsHookSupplier = alkaVipsHookSupplier;
     }
 
     public void open(Player player) {
@@ -97,6 +108,7 @@ public class EnderChestMenu {
 
         if (!isAdmin) {
             setupControlBar(inv, page, maxPages);
+            setupVipWarning(inv, viewer);
         } else {
             ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             ItemMeta glassMeta = glass.getItemMeta();
@@ -154,6 +166,39 @@ public class EnderChestMenu {
         if (upgrade != null) {
             inv.setItem(50, ItemBuilder.fromConfig(upgrade));
         }
+    }
+
+    /**
+     * Item de aviso (slot 47, livre no controle atual) quando o VIP do jogador esta a
+     * <= 3 dias de expirar E isso custaria paginas extra (ver
+     * EnderChestManager#getPagesAtRisk) - so aparece se o AlkaVips estiver presente,
+     * ja que so ele sabe a data real de expiracao (permissao pura nao carrega isso).
+     */
+    private void setupVipWarning(Inventory inv, Player viewer) {
+        int pagesAtRisk = enderChestManager.getPagesAtRisk(viewer);
+        if (pagesAtRisk <= 0) {
+            return;
+        }
+        AlkaVipsHook alkaVipsHook = alkaVipsHookSupplier.get();
+        if (alkaVipsHook == null) {
+            return;
+        }
+        Optional<Long> remaining = alkaVipsHook.activeVipRemainingMillis(viewer);
+        if (remaining.isEmpty() || remaining.get() > THREE_DAYS_MILLIS) {
+            return;
+        }
+        long days = Math.max(1, (remaining.get() / TimeUnit.DAYS.toMillis(1)) + 1);
+
+        ItemStack warning = new ItemStack(Material.CLOCK);
+        ItemMeta meta = warning.getItemMeta();
+        if (meta != null) {
+            meta.displayName(messages.getNoPrefix("vip-warning.gui-item-name",
+                    "<days>", String.valueOf(days)));
+            meta.lore(messages.getList("vip-warning.gui-item-lore",
+                    "<days>", String.valueOf(days), "<pages>", String.valueOf(pagesAtRisk)));
+            warning.setItemMeta(meta);
+        }
+        inv.setItem(47, warning);
     }
 
     public void sortInventory(Inventory inv) {

@@ -88,9 +88,13 @@ public class Messages {
     }
 
     public List<Component> getList(String path) {
+        return getList(path, new String[0]);
+    }
+
+    public List<Component> getList(String path, String... placeholders) {
         List<Component> lines = new ArrayList<>();
         for (String line : config.getStringList(path)) {
-            lines.add(mm.deserialize(line));
+            lines.add(mm.deserialize(applyPlaceholders(line, placeholders)));
         }
         return lines;
     }

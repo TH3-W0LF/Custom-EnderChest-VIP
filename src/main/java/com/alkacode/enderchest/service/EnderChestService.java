@@ -1,13 +1,16 @@
 package com.alkacode.enderchest.service;
 
 import com.alkacode.enderchest.database.EnderChestRepository;
+import com.alkacode.enderchest.hook.AlkaVipsHook;
 import com.alkacode.enderchest.manager.EnderChestManager;
 import com.alkacode.enderchest.menu.EnderChestMenu;
+import com.alkacode.enderchest.util.Messages;
 import com.alkacode.enderchest.util.PasswordGate;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Ponto unico de entrada para abrir o EnderChest customizado - o comando /ec e o
@@ -22,12 +25,12 @@ public class EnderChestService {
     private final EnderChestManager enderChestManager;
 
     public EnderChestService(JavaPlugin plugin, EnderChestRepository repository,
-                              PasswordGate passwordGate,
-                              EnderChestManager enderChestManager) {
+                              PasswordGate passwordGate, EnderChestManager enderChestManager,
+                              Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier) {
         this.repository = repository;
         this.passwordGate = passwordGate;
         this.enderChestManager = enderChestManager;
-        this.menu = new EnderChestMenu(plugin, repository, enderChestManager);
+        this.menu = new EnderChestMenu(plugin, repository, enderChestManager, messages, alkaVipsHookSupplier);
     }
 
     public void openEnderChest(Player player) {

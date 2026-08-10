@@ -3,6 +3,7 @@ package com.alkacode.enderchest.listener;
 import com.alkacode.enderchest.database.EnderChestRepository;
 import com.alkacode.enderchest.economy.EconomyService;
 import com.alkacode.enderchest.gui.EnderChestUpgradeGui;
+import com.alkacode.enderchest.hook.AlkaVipsHook;
 import com.alkacode.enderchest.manager.EnderChestManager;
 import com.alkacode.enderchest.menu.EnderChestHolder;
 import com.alkacode.enderchest.service.EnderChestService;
@@ -25,12 +26,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * Listener do ciclo do EnderChest customizado (bloco fisico, GUI de conteudo, cristais
@@ -46,21 +51,49 @@ import java.util.UUID;
  */
 public class EnderChestListener implements Listener {
 
+    private static final long THREE_DAYS_MILLIS = TimeUnit.DAYS.toMillis(3);
+
     private final JavaPlugin plugin;
     private final EnderChestService service;
     private final EnderChestManager enderChestManager;
     private final EnderChestRepository repository;
     private final EconomyService economyService;
     private final Messages messages;
+    private final Supplier<AlkaVipsHook> alkaVipsHookSupplier;
 
     public EnderChestListener(JavaPlugin plugin, EnderChestService service, EnderChestManager enderChestManager,
-                               EnderChestRepository repository, EconomyService economyService, Messages messages) {
+                               EnderChestRepository repository, EconomyService economyService, Messages messages,
+                               Supplier<AlkaVipsHook> alkaVipsHookSupplier) {
         this.plugin = plugin;
         this.service = service;
         this.enderChestManager = enderChestManager;
         this.repository = repository;
         this.economyService = economyService;
         this.messages = messages;
+        this.alkaVipsHookSupplier = alkaVipsHookSupplier;
+    }
+
+    /** Aviso de VIP expirando em ate 3 dias (uma vez por login) - so se isso custaria paginas extra. */
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        int pagesAtRisk = enderChestManager.getPagesAtRisk(player);
+        if (pagesAtRisk <= 0) {
+            return;
+        }
+        AlkaVipsHook alkaVipsHook = alkaVipsHookSupplier.get();
+        if (alkaVipsHook == null) {
+            return;
+        }
+        Optional<Long> remaining = alkaVipsHook.activeVipRemainingMillis(player);
+        if (remaining.isEmpty() || remaining.get() > THREE_DAYS_MILLIS) {
+            return;
+        }
+        long days = Math.max(1, (remaining.get() / TimeUnit.DAYS.toMillis(1)) + 1);
+        for (Component line : messages.getList("vip-warning.chat",
+                "<days>", String.valueOf(days), "<pages>", String.valueOf(pagesAtRisk))) {
+            player.sendMessage(line);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)

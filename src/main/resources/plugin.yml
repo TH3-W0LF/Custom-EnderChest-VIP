@@ -5,7 +5,7 @@ api-version: '1.21'
 author: MestreDEV
 description: EnderChest customizado com paginas por tier, senha e upgrades via AlkaEconomy. Sobre o AlkaCore (banco/HikariCP, GUI de upgrades).
 depend: [AlkaCore, AlkaEconomy]
-softdepend: [LuckPerms, PlaceholderAPI]
+softdepend: [LuckPerms, PlaceholderAPI, AlkaVips]
 
 commands:
   ec:

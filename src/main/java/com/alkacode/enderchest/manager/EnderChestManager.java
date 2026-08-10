@@ -70,4 +70,16 @@ public class EnderChestManager {
         int tier = getEffectiveTier(player);
         return Math.max(1, tier);
     }
+
+    /**
+     * Quantas paginas o jogador perderia agora mesmo se a permissao que concede o tier
+     * VIP sumisse (ex: o VIP expirar) - a diferenca entre o tier efetivo atual (que
+     * pode incluir bonus de permissao) e o tier "sem VIP" (so o comprado no banco, com
+     * o piso de 1 pagina gratis). Usado no aviso de expiracao - ver AlkaVipsHook.
+     */
+    public int getPagesAtRisk(Player player) {
+        int current = getEffectiveTier(player);
+        int withoutVip = Math.max(1, repository.getTier(player.getUniqueId()));
+        return Math.max(0, current - withoutVip);
+    }
 }

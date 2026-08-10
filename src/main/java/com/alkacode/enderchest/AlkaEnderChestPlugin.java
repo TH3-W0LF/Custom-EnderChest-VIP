@@ -8,6 +8,7 @@ import com.alkacode.enderchest.command.CommandEC;
 import com.alkacode.enderchest.command.CommandEconomy;
 import com.alkacode.enderchest.database.EnderChestRepository;
 import com.alkacode.enderchest.economy.EconomyService;
+import com.alkacode.enderchest.hook.AlkaVipsHook;
 import com.alkacode.enderchest.listener.EnderChestListener;
 import com.alkacode.enderchest.listener.PasswordChatGuardListener;
 import com.alkacode.enderchest.manager.EnderChestManager;
@@ -15,6 +16,9 @@ import com.alkacode.enderchest.service.EnderChestService;
 import com.alkacode.enderchest.util.LogUtils;
 import com.alkacode.enderchest.util.Messages;
 import com.alkacode.enderchest.util.PasswordGate;
+import org.bukkit.Bukkit;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Base do EnderChest customizado sobre o AlkaCore (banco/HikariCP via
@@ -51,11 +55,18 @@ public final class AlkaEnderChestPlugin extends AlkaPlugin {
 
         PasswordGate passwordGate = new PasswordGate(this, repository, enderChestManager, messages);
 
-        EnderChestService enderChestService = new EnderChestService(this, repository, passwordGate, enderChestManager);
+        // AlkaVips (softdepend) nao tem ordem garantida de onEnable - mesma licao ja
+        // aplicada no AlkaDrop/AlkaMines (bug real 2026-08-09): resolve 1 tick depois,
+        // nunca sincrono aqui.
+        AtomicReference<AlkaVipsHook> alkaVipsHookRef = new AtomicReference<>(null);
+        Bukkit.getScheduler().runTask(this, () -> alkaVipsHookRef.set(AlkaVipsHook.tryHook(getLogger())));
+
+        EnderChestService enderChestService = new EnderChestService(this, repository, passwordGate, enderChestManager,
+                messages, alkaVipsHookRef::get);
         passwordGate.setEnderChestService(enderChestService);
 
         EnderChestListener listener = new EnderChestListener(this, enderChestService, enderChestManager,
-                repository, economyService, messages);
+                repository, economyService, messages, alkaVipsHookRef::get);
         getServer().getPluginManager().registerEvents(listener, this);
         getServer().getPluginManager().registerEvents(new PasswordChatGuardListener(passwordGate, messages), this);
 

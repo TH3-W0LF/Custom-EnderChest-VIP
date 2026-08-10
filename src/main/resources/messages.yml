@@ -53,6 +53,24 @@ enderchest:
   sorted: "<green>Itens organizados!"
   shulker-blocked: "<red>Voce nao pode colocar Shulker Boxes no EnderChest!"
 
+vip-warning:
+  chat:
+    - ""
+    - "<gray><st>――――――――――――――――――――――――――――――</st>"
+    - "<yellow><b>⚠ Seu VIP esta acabando!</b>"
+    - "<gray>Seu EnderChest vai perder <white><pages></white> pagina(s) extra em <white><days></white> dia(s)."
+    - "<gray>Reative seu VIP pra nao perder o acesso."
+    - "<green>Os itens NAO sao apagados <gray>- so ficam bloqueados ate voce reativar."
+    - "<gray><st>――――――――――――――――――――――――――――――</st>"
+    - ""
+  gui-item-name: "<yellow><b>⚠ VIP expirando em <days> dia(s)!</b>"
+  gui-item-lore:
+    - "<gray>Voce vai perder <white><pages></white> pagina(s) extra"
+    - "<gray>do EnderChest em <white><days></white> dia(s)."
+    - ""
+    - "<green>Os itens NAO sao apagados <gray>- so ficam"
+    - "<gray>bloqueados ate o VIP ser reativado."
+
 admin:
   reload-done: "<green>Configuracao (config.yml, messages.yml, economias.yml) recarregada."
   ec-view-usage: "<red>Uso: /aec ver <nick>"
