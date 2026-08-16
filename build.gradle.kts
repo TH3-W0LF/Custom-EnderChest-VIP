@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.alkacode"
-version = "1.0.12"
+version = "1.0.13"
 
 java {
     toolchain {
@@ -32,7 +32,7 @@ dependencies {
     // pra resolver o cast/instanceof AlkaEconomyPlugin, mesmo sem usar API do Core direto.
     // banco/HikariCP vem do AlkaCore (DatabaseProvider) - AlkaEnderChest nao abre
     // conexao JDBC propria nem embarca driver.
-    compileOnly("com.alkacode:AlkaCore:1.0.0")
+    compileOnly("com.alkacode:AlkaCore:1.0.3")
     compileOnly("com.alkacode:AlkaEconomy:1.0.5")
     compileOnly("me.clip:placeholderapi:2.11.6")
 }
@@ -55,5 +55,9 @@ tasks.processResources {
     // sem isso, o Gradle nao percebe que so `version` mudou e reusa o plugin.yml
     // antigo do cache (processResources fica UP-TO-DATE incorretamente).
     inputs.property("version", project.version)
-    expand("version" to project.version)
+    filesMatching("plugin.yml") {
+
+        expand("version" to project.version)
+
+    }
 }
