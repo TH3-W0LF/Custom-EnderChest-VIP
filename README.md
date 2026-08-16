@@ -79,8 +79,10 @@ suporte a **LuckPerms** e **PlaceholderAPI**.
 
 | Permissão | Descrição |
 | --- | --- |
-| `enderchest.vip.<n>` | Concede páginas extras automaticamente por tier |
-| `alkaenderchest.admin` | Acesso aos comandos administrativos (`/aec`) |
+| `enderchest.vip.<n>` (`enderchest.free`) | Concede páginas extras automaticamente por tier |
+| `meuplugin.admin` | Acesso aos comandos administrativos (`/aec`) |
+| `alkaenderchest.admin` | Permite abrir o baú com Chave Mestra, ignorando a senha (`/ec chavemestra`) |
+| `alkaenderchest.senha.remover.bypass` | Remove a própria senha sem precisar de Chave Mestra |
 
 ## 📝 Licença
 
