@@ -2,10 +2,10 @@ package com.alkacode.enderchest.menu;
 
 import com.alkacode.enderchest.database.EnderChestRepository;
 import com.alkacode.enderchest.hook.AlkaVipsHook;
+import com.alkacode.enderchest.hook.ItemsAdderFontHook;
 import com.alkacode.enderchest.manager.EnderChestManager;
 import com.alkacode.enderchest.util.ItemBuilder;
 import com.alkacode.enderchest.util.Messages;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -33,14 +33,17 @@ public class EnderChestMenu {
     private final EnderChestManager enderChestManager;
     private final Messages messages;
     private final Supplier<AlkaVipsHook> alkaVipsHookSupplier;
+    private final Supplier<ItemsAdderFontHook> itemsAdderFontHookSupplier;
 
     public EnderChestMenu(JavaPlugin plugin, EnderChestRepository repository, EnderChestManager enderChestManager,
-                           Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier) {
+                           Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier,
+                           Supplier<ItemsAdderFontHook> itemsAdderFontHookSupplier) {
         this.plugin = plugin;
         this.repository = repository;
         this.enderChestManager = enderChestManager;
         this.messages = messages;
         this.alkaVipsHookSupplier = alkaVipsHookSupplier;
+        this.itemsAdderFontHookSupplier = itemsAdderFontHookSupplier;
     }
 
     public void open(Player player) {
@@ -67,7 +70,7 @@ public class EnderChestMenu {
 
         ItemStack[] pageItems = repository.loadPage(targetUUID, page);
 
-        String titlePlaceholder = ":offset_-16::img_drakkar:ui_enderchest:";
+        String titlePlaceholder = ":offset_-49::ui_enderchest:";
         String title = "Ender Chest";
 
         if (isAdmin && !viewer.getUniqueId().equals(targetUUID)) {
@@ -76,15 +79,12 @@ public class EnderChestMenu {
             if (targetName == null) targetName = targetUUID.toString();
             title = "Ender Chest de " + targetName;
         } else {
-            try {
-                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                    String processedTitle = PlaceholderAPI.setPlaceholders(viewer, titlePlaceholder);
-                    if (processedTitle != null && !processedTitle.equals(titlePlaceholder) && !processedTitle.isEmpty()) {
-                        title = processedTitle;
-                    }
+            ItemsAdderFontHook itemsAdderFontHook = itemsAdderFontHookSupplier.get();
+            if (itemsAdderFontHook != null) {
+                String processedTitle = itemsAdderFontHook.replaceFontImages(titlePlaceholder);
+                if (processedTitle != null && !processedTitle.equals(titlePlaceholder) && !processedTitle.isEmpty()) {
+                    title = processedTitle;
                 }
-            } catch (Exception e) {
-                // Fallback para titulo padrao
             }
         }
 

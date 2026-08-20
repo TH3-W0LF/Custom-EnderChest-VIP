@@ -142,7 +142,7 @@ public class EnderChestUpgradeGui extends BaseGui {
                 MM.deserialize(" <#b57edc>Cristais de Tier</#b57edc> <gray>para evoluir").decoration(TextDecoration.ITALIC, false),
                 MM.deserialize(" <gray>o seu <white>EnderChest</white> ou de amigos.").decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
-                MM.deserialize("<gradient:#FF4500:#8B0000>Exclusivo AlkaCode</gradient>").decoration(TextDecoration.ITALIC, false),
+                MM.deserialize("<gradient:#FF4500:#8B0000>Exclusivo AlkaStudio</gradient>").decoration(TextDecoration.ITALIC, false),
                 Component.empty(),
                 MM.deserialize(" <italic><dark_gray>Duvidas? Entre em contato com a Staff.").decoration(TextDecoration.ITALIC, false)
         ));

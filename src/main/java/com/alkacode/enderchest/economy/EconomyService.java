@@ -16,8 +16,8 @@ import java.util.UUID;
 
 /**
  * Ponte para uma moeda do AlkaEconomy, resolvida por id configuravel em
- * {@code economias.yml} (chave {@code currency-id}, padrao "drakonio" - preserva o
- * comportamento original desse plugin, que nasceu em torno da economia Drakonio real
+ * {@code economias.yml} (chave {@code currency-id}, padrao "alkarion" - preserva o
+ * comportamento original desse plugin, que nasceu em torno da economia Alkarion real
  * desta rede). Nao hardcoda mais a moeda: qualquer id valido no AlkaEconomy funciona,
  * inclusive uma criada depois de o plugin ja estar rodando (basta reload) - mesmo
  * padrao de resolucao por string usado no AlkaVips/AlkaMines (ver
@@ -26,7 +26,7 @@ import java.util.UUID;
  */
 public class EconomyService {
 
-    private static final String DEFAULT_CURRENCY_ID = "drakonio";
+    private static final String DEFAULT_CURRENCY_ID = "alkarion";
 
     private final JavaPlugin plugin;
     private final EconomyManager economyManager;

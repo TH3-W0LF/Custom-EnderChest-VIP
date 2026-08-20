@@ -2,6 +2,7 @@ package com.alkacode.enderchest.service;
 
 import com.alkacode.enderchest.database.EnderChestRepository;
 import com.alkacode.enderchest.hook.AlkaVipsHook;
+import com.alkacode.enderchest.hook.ItemsAdderFontHook;
 import com.alkacode.enderchest.manager.EnderChestManager;
 import com.alkacode.enderchest.menu.EnderChestMenu;
 import com.alkacode.enderchest.util.Messages;
@@ -26,11 +27,13 @@ public class EnderChestService {
 
     public EnderChestService(JavaPlugin plugin, EnderChestRepository repository,
                               PasswordGate passwordGate, EnderChestManager enderChestManager,
-                              Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier) {
+                              Messages messages, Supplier<AlkaVipsHook> alkaVipsHookSupplier,
+                              Supplier<ItemsAdderFontHook> itemsAdderFontHookSupplier) {
         this.repository = repository;
         this.passwordGate = passwordGate;
         this.enderChestManager = enderChestManager;
-        this.menu = new EnderChestMenu(plugin, repository, enderChestManager, messages, alkaVipsHookSupplier);
+        this.menu = new EnderChestMenu(plugin, repository, enderChestManager, messages, alkaVipsHookSupplier,
+                itemsAdderFontHookSupplier);
     }
 
     public void openEnderChest(Player player) {

@@ -1,7 +1,7 @@
 # Id da moeda usada pelo EnderChest (deve existir no config.yml do AlkaEconomy).
-# Padrao "drakonio" - o AlkaEnderChest nasceu em torno da economia Drakonio desta
+# Padrao "alkarion" - o AlkaEnderChest nasceu em torno da economia Alkarion desta
 # rede. So mude isso se for reusar o plugin noutro servidor com outra moeda.
-currency-id: "drakonio"
+currency-id: "alkarion"
 
 # Precos dos Upgrades de Tier (na moeda definida acima)
 # Formato: tier: preco

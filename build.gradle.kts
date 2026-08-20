@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.alkacode"
-version = "1.0.13"
+version = "1.0.15"
 
 java {
     toolchain {
@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    // moeda DRAKONIO vem do AlkaEconomy - substitui o Vault generico do plugin legado
+    // moeda ALKARION vem do AlkaEconomy - substitui o Vault generico do plugin legado
     // (publicado via `./gradlew publishToMavenLocal` no projeto AlkaEconomy). AlkaCore
     // e necessario em compileOnly tambem porque AlkaEconomyPlugin agora estende
     // com.alkacode.core.plugin.AlkaPlugin - o javac precisa da hierarquia completa
@@ -33,7 +33,7 @@ dependencies {
     // banco/HikariCP vem do AlkaCore (DatabaseProvider) - AlkaEnderChest nao abre
     // conexao JDBC propria nem embarca driver.
     compileOnly("com.alkacode:AlkaCore:1.0.3")
-    compileOnly("com.alkacode:AlkaEconomy:1.0.5")
+    compileOnly("com.alkacode:AlkaEconomy:1.0.8")
     compileOnly("me.clip:placeholderapi:2.11.6")
 }
 

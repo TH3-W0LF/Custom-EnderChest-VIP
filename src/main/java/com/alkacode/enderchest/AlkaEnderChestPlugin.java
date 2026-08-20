@@ -9,6 +9,7 @@ import com.alkacode.enderchest.command.CommandEconomy;
 import com.alkacode.enderchest.database.EnderChestRepository;
 import com.alkacode.enderchest.economy.EconomyService;
 import com.alkacode.enderchest.hook.AlkaVipsHook;
+import com.alkacode.enderchest.hook.ItemsAdderFontHook;
 import com.alkacode.enderchest.listener.EnderChestListener;
 import com.alkacode.enderchest.listener.PasswordChatGuardListener;
 import com.alkacode.enderchest.manager.EnderChestManager;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Base do EnderChest customizado sobre o AlkaCore (banco/HikariCP via
  * api.getDatabase(), sem DatabaseManager proprio - ver {@link EnderChestRepository})
- * e o AlkaEconomy (moeda configuravel via economias.yml, padrao drakonio). Estende
+ * e o AlkaEconomy (moeda configuravel via economias.yml, padrao alkarion). Estende
  * {@link AlkaPlugin} em vez de JavaPlugin
  * direto: garante que {@link AlkaAPI#get()} ja esta pronta quando
  * {@link #onPluginEnable()} roda (via `depend: [AlkaCore, AlkaEconomy]` no
@@ -61,8 +62,13 @@ public final class AlkaEnderChestPlugin extends AlkaPlugin {
         AtomicReference<AlkaVipsHook> alkaVipsHookRef = new AtomicReference<>(null);
         Bukkit.getScheduler().runTask(this, () -> alkaVipsHookRef.set(AlkaVipsHook.tryHook(getLogger())));
 
+        // ItemsAdder (softdepend) - mesma licao de ordem de carregamento do AlkaVips acima:
+        // resolve 1 tick depois, nunca sincrono aqui.
+        AtomicReference<ItemsAdderFontHook> itemsAdderFontHookRef = new AtomicReference<>(null);
+        Bukkit.getScheduler().runTask(this, () -> itemsAdderFontHookRef.set(ItemsAdderFontHook.tryHook(getLogger())));
+
         EnderChestService enderChestService = new EnderChestService(this, repository, passwordGate, enderChestManager,
-                messages, alkaVipsHookRef::get);
+                messages, alkaVipsHookRef::get, itemsAdderFontHookRef::get);
         passwordGate.setEnderChestService(enderChestService);
 
         EnderChestListener listener = new EnderChestListener(this, enderChestService, enderChestManager,
