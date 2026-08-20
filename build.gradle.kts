@@ -32,7 +32,7 @@ dependencies {
     // pra resolver o cast/instanceof AlkaEconomyPlugin, mesmo sem usar API do Core direto.
     // banco/HikariCP vem do AlkaCore (DatabaseProvider) - AlkaEnderChest nao abre
     // conexao JDBC propria nem embarca driver.
-    compileOnly("com.alkacode:AlkaCore:1.0.3")
+    compileOnly("com.alkacode:AlkaCore:1.0.8")
     compileOnly("com.alkacode:AlkaEconomy:1.0.8")
     compileOnly("me.clip:placeholderapi:2.11.6")
 }
