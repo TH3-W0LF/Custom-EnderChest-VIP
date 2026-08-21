@@ -91,7 +91,24 @@ gui:
 
 # Configuracao do Menu de Upgrades
 upgrades:
+  border:
+    material: GRAY_STAINED_GLASS_PANE
+
+  info-item:
+    slot: 4
+    material: PAPER
+    name: "<gradient:#FFAA00:#FFE055><bold>Loja de Upgrades</bold></gradient>"
+    lore:
+      - " <gray>Aqui voce pode comprar"
+      - " <#b57edc>Cristais de Tier</#b57edc> <gray>para evoluir"
+      - " <gray>o seu <white>EnderChest</white> ou de amigos."
+      - ""
+      - "<gradient:#FF4500:#8B0000>Exclusivo AlkaStudio</gradient>"
+      - ""
+      - " <italic><dark_gray>Duvidas? Entre em contato com a Staff."
+
   back-button:
+    slot: 49
     material: ARROW
     name: "<red>Voltar"
     lore:
@@ -105,6 +122,32 @@ upgrades:
     lore:
       - "<gray>Use este item para liberar"
       - "<gray>a Pagina <tier> do EnderChest."
+    # Estados exibidos no item dentro do menu de upgrades (nome/lore sobrescrevem o base acima)
+    states:
+      acquired:
+        name: "<green>Tier <tier> (Adquirido)"
+        lore-extra:
+          - ""
+          - "<green>Ja adquirido!"
+      next:
+        price-line: "<yellow>Preco: <gold><price> <currency>"
+        lore-can-buy: "<green>Voce pode comprar!"
+        lore-cant-buy: "<red>Saldo insuficiente"
+      locked:
+        name: "<red><st>Tier <tier></st> <gray>(Bloqueado)"
+        lore-extra:
+          - ""
+          - "<red>Bloqueado"
+          - "<gray>Complete o Tier <current-tier> primeiro"
+
+  # Cristal fisico dado ao comprar (item que o jogador usa com clique direito)
+  tier-crystal:
+    name: "<#b57edc>Cristal de Tier <tier>"
+    lore:
+      - "<gray>Use este item para liberar"
+      - "<gray>a Pagina <tier> do EnderChest."
+      - ""
+      - "<yellow>Clique com botao direito para usar!"
 
   # Slots dos Tiers (2-29) mapeados para niveis
   tiers:

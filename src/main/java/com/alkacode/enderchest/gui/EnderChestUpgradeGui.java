@@ -60,11 +60,14 @@ public class EnderChestUpgradeGui extends BaseGui {
             return;
         }
 
-        setItem(4, buildInfoItem());
+        ConfigurationSection infoItem = upgradeConfig.getConfigurationSection("info-item");
+        if (infoItem != null) {
+            setItem(infoItem.getInt("slot", 4), ItemBuilder.fromConfig(infoItem));
+        }
 
         ConfigurationSection backButton = upgradeConfig.getConfigurationSection("back-button");
         if (backButton != null) {
-            setItem(49, ItemBuilder.fromConfig(backButton), e -> {
+            setItem(backButton.getInt("slot", 49), ItemBuilder.fromConfig(backButton), e -> {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                 player.closeInventory();
                 enderChestService.openEnderChestDirect(player, 0);
@@ -84,7 +87,7 @@ public class EnderChestUpgradeGui extends BaseGui {
             }
         }
 
-        fill(glass());
+        fill(glass(upgradeConfig));
     }
 
     private void attemptPurchase(int tier) {
@@ -114,6 +117,7 @@ public class EnderChestUpgradeGui extends BaseGui {
 
     private ItemStack buildTierCrystal(int tier) {
         ConfigurationSection tierItemConfig = plugin.getConfig().getConfigurationSection("upgrades.tier-item");
+        ConfigurationSection crystalConfig = plugin.getConfig().getConfigurationSection("upgrades.tier-crystal");
         ItemStack item = new ItemStack(Material.valueOf(tierItemConfig.getString("material", "PAPER")));
         ItemMeta meta = item.getItemMeta();
 
@@ -122,40 +126,28 @@ public class EnderChestUpgradeGui extends BaseGui {
             if (cmd > 0) meta.setCustomModelData(cmd);
         }
 
-        meta.displayName(MM.deserialize("<#b57edc>Cristal de Tier " + tier).decoration(TextDecoration.ITALIC, false));
-        meta.lore(List.of(
-                MM.deserialize("<gray>Use este item para liberar").decoration(TextDecoration.ITALIC, false),
-                MM.deserialize("<gray>a Pagina " + tier + " do EnderChest.").decoration(TextDecoration.ITALIC, false),
-                Component.empty(),
-                MM.deserialize("<yellow>Clique com botao direito para usar!").decoration(TextDecoration.ITALIC, false)
-        ));
+        String tierStr = String.valueOf(tier);
+        meta.displayName(MM.deserialize(crystalConfig.getString("name", "").replace("<tier>", tierStr))
+                .decoration(TextDecoration.ITALIC, false));
+
+        List<Component> lore = new ArrayList<>();
+        for (String line : crystalConfig.getStringList("lore")) {
+            lore.add(line.isEmpty() ? Component.empty()
+                    : MM.deserialize(line.replace("<tier>", tierStr)).decoration(TextDecoration.ITALIC, false));
+        }
+        meta.lore(lore);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private ItemStack buildInfoItem() {
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta meta = info.getItemMeta();
-        meta.displayName(MM.deserialize("<gradient:#FFAA00:#FFE055><bold>Loja de Upgrades</bold></gradient>").decoration(TextDecoration.ITALIC, false));
-        meta.lore(List.of(
-                MM.deserialize(" <gray>Aqui voce pode comprar").decoration(TextDecoration.ITALIC, false),
-                MM.deserialize(" <#b57edc>Cristais de Tier</#b57edc> <gray>para evoluir").decoration(TextDecoration.ITALIC, false),
-                MM.deserialize(" <gray>o seu <white>EnderChest</white> ou de amigos.").decoration(TextDecoration.ITALIC, false),
-                Component.empty(),
-                MM.deserialize("<gradient:#FF4500:#8B0000>Exclusivo AlkaStudio</gradient>").decoration(TextDecoration.ITALIC, false),
-                Component.empty(),
-                MM.deserialize(" <italic><dark_gray>Duvidas? Entre em contato com a Staff.").decoration(TextDecoration.ITALIC, false)
-        ));
-        info.setItemMeta(meta);
-        return info;
     }
 
     private ItemStack buildTierItem(ConfigurationSection upgradeConfig, String key, int tierLevel, int currentTier, int nextTier) {
         ItemStack tierItem = ItemBuilder.fromConfig(upgradeConfig.getConfigurationSection("tier-item"));
         ItemMeta meta = tierItem.getItemMeta();
+        ConfigurationSection states = upgradeConfig.getConfigurationSection("tier-item.states");
 
         if (tierLevel <= currentTier) {
-            meta.displayName(MM.deserialize("<green>Tier " + tierLevel + " (Adquirido)").decoration(TextDecoration.ITALIC, false));
+            String name = states.getString("acquired.name", "<green>Tier <tier> (Adquirido)").replace("<tier>", key);
+            meta.displayName(MM.deserialize(name).decoration(TextDecoration.ITALIC, false));
             meta.addEnchant(Enchantment.UNBREAKING, 1, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else if (tierLevel == nextTier) {
@@ -165,7 +157,8 @@ public class EnderChestUpgradeGui extends BaseGui {
         } else {
             tierItem.setType(Material.BARRIER);
             meta = tierItem.getItemMeta();
-            meta.displayName(MM.deserialize("<red><st>Tier " + tierLevel + "</st> <gray>(Bloqueado)").decoration(TextDecoration.ITALIC, false));
+            String name = states.getString("locked.name", "<red><st>Tier <tier></st> <gray>(Bloqueado)").replace("<tier>", key);
+            meta.displayName(MM.deserialize(name).decoration(TextDecoration.ITALIC, false));
         }
 
         if (meta.hasLore()) {
@@ -180,21 +173,25 @@ public class EnderChestUpgradeGui extends BaseGui {
                 double price = economyService.getUpgradePrice(tierLevel);
                 String currencyName = economyService.getCurrencyName();
                 newLore.add(Component.empty());
-                newLore.add(MM.deserialize("<yellow>Preco: <gold>" + String.format("%.0f", price) + " " + currencyName).decoration(TextDecoration.ITALIC, false));
+                String priceLine = states.getString("next.price-line", "<yellow>Preco: <gold><price> <currency>")
+                        .replace("<price>", String.format("%.0f", price))
+                        .replace("<currency>", currencyName);
+                newLore.add(MM.deserialize(priceLine).decoration(TextDecoration.ITALIC, false));
 
                 double balance = economyService.getBalance(player.getUniqueId());
-                if (balance >= price) {
-                    newLore.add(MM.deserialize("<green>Voce pode comprar!").decoration(TextDecoration.ITALIC, false));
-                } else {
-                    newLore.add(MM.deserialize("<red>Saldo insuficiente").decoration(TextDecoration.ITALIC, false));
-                }
+                String statusLine = balance >= price
+                        ? states.getString("next.lore-can-buy", "<green>Voce pode comprar!")
+                        : states.getString("next.lore-cant-buy", "<red>Saldo insuficiente");
+                newLore.add(MM.deserialize(statusLine).decoration(TextDecoration.ITALIC, false));
             } else if (tierLevel <= currentTier) {
-                newLore.add(Component.empty());
-                newLore.add(MM.deserialize("<green>Ja adquirido!").decoration(TextDecoration.ITALIC, false));
+                for (String line : states.getStringList("acquired.lore-extra")) {
+                    newLore.add(line.isEmpty() ? Component.empty() : MM.deserialize(line).decoration(TextDecoration.ITALIC, false));
+                }
             } else {
-                newLore.add(Component.empty());
-                newLore.add(MM.deserialize("<red>Bloqueado").decoration(TextDecoration.ITALIC, false));
-                newLore.add(MM.deserialize("<gray>Complete o Tier " + currentTier + " primeiro").decoration(TextDecoration.ITALIC, false));
+                for (String line : states.getStringList("locked.lore-extra")) {
+                    String replaced = line.replace("<current-tier>", String.valueOf(currentTier));
+                    newLore.add(replaced.isEmpty() ? Component.empty() : MM.deserialize(replaced).decoration(TextDecoration.ITALIC, false));
+                }
             }
 
             meta.lore(newLore);
@@ -203,8 +200,11 @@ public class EnderChestUpgradeGui extends BaseGui {
         return tierItem;
     }
 
-    private ItemStack glass() {
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+    private ItemStack glass(ConfigurationSection upgradeConfig) {
+        String matName = upgradeConfig.getString("border.material", "GRAY_STAINED_GLASS_PANE");
+        Material material = Material.matchMaterial(matName);
+        if (material == null) material = Material.GRAY_STAINED_GLASS_PANE;
+        ItemStack glass = new ItemStack(material);
         ItemMeta meta = glass.getItemMeta();
         meta.displayName(Component.empty());
         glass.setItemMeta(meta);
